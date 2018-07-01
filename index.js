@@ -20,7 +20,7 @@ io.on('connection', function(socket){
 
 	socket.on('registration', function(msg){
 	    console.log("name " + msg);
-	    users.push(msg.trim());
+	    users.push(msg);
 	    connections.push(socket.id);
 	    console.log(users);
 	    console.log(connections);

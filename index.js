@@ -131,7 +131,7 @@ function getBarCodeType(barcode)
 			return 'BBN,30,,30,44,E';
 			break;
 		case 'Code 128':
-			return 'BCN,100,Y,N,N';
+			return 'BCN,20,Y,N,N';
 			break;
 		case 'UPS MaxiCode':
 			return 'BD';

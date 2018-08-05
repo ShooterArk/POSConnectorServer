@@ -66,9 +66,9 @@ app.get('/api/cleareverything', (req, res) => {
 	 //connections.indexOf(index);
 
 	//io.to(connection).emit('labelToPrint', "message from the server");
-	users = [];
-	connections = [];
-	
+	// users = [];
+	// connections = [];
+	res.send("Successful");
 });
 
 // PORT

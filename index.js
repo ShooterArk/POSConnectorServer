@@ -45,6 +45,19 @@ app.post('/api/printlabel', (req, res) => {
 	createCommand(req.body);
 });
 
+app.post('/api/printlabelWithZPL', (req, res) => {
+	// console.log(req.body.user);
+	 //connections.indexOf(index);
+
+	//io.to(connection).emit('labelToPrint', "message from the server");
+
+	var index = users.indexOf(req.body.user);
+	var connection = connections[index];
+
+	io.to(connection).emit('labelToPrint', req.body.command);
+
+	return "Successful";
+});
 
 // PORT
 var port = process.env.PORT || 3000;
@@ -79,13 +92,11 @@ function createCommand(data)
 	}
 
 	// Map the barcode
-	command += "^FO" + data.Barcode.XPosition + "," + data.Barcode.YPosition +"\n\r^" + getBarCodeType(data.Barcode.type) + "\n\r" + "^FD" + data.Barcode.data + "\n\r^FS\n\r"; 
+	command += "^FO" + data.Barcode.XPosition + "," + data.Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.Barcode) + "\n\r" + "^FD" + data.Barcode.data + "\n\r^FS\n\r"; 
 
 	// Set the Quantity value in the command
 	command += "^PQ" + data.Quantity + "\n\r"
 	command += "^XZ";
-	// console.log(command);
-
 	var index = users.indexOf(data.user);
 	var connection = connections[index];
 
@@ -95,7 +106,7 @@ function createCommand(data)
 
 function getBarCodeType(barcode)
 {
-	switch(barcode)
+	switch(barcode.type)
 	{
 		case 'Aztec':
 			return 'B0N,5,N,0,N,1,0';
@@ -104,40 +115,40 @@ function getBarCodeType(barcode)
 			return 'B1N,N,150,Y,N';
 			break;
 		case 'Interleaved 2 of 5':
-			return 'B2N,150,Y,N,N';
+			return 'B2N,' + barcode.height + ',Y,N,N';
 			break;
 		case 'Code 39':
-			return 'B3N,N,100,Y,N';
+			return 'B3N,N,' + barcode.height + ',Y,N'; 100
 			break;
 		case 'Code 49':
 			return 'B4N,20,A,A';
 			break;
 		case 'Planet Code':
-			return 'B5N,100,Y,N';
+			return 'B5N,' + barcode.height + '0,Y,N'; // 100
 			break;
 		case 'PDF417':
 			return 'B7N,8,5,7,21,N';
 			break;
 		case 'EAN-8':
-			return 'B8N,100,Y,N';
+			return 'B8N,' + barcode.height + ',Y,N'; //100
 			break;
 		case 'UPC-E':
-			return 'B9N,100,Y,N,Y';
+			return 'B9N,' + barcode.height + ',Y,N,Y'; // 100
 			break;
 		case 'Code 93':
-			return 'BAN,100,Y,N,N';
+			return 'BAN,' + barcode.height + ',Y,N,N'; //100
 			break;
 		case 'CODABLOCK':
 			return 'BBN,30,,30,44,E';
 			break;
 		case 'Code 128':
-			return 'BCN,20,Y,N,N';
+			return 'BCN,' + barcode.height + ',Y,N,N'; // 100
 			break;
 		case 'UPS MaxiCode':
 			return 'BD';
 			break;
 		case 'EAN-13':
-			return 'BEN,100,Y,N';
+			return 'BEN,' + barcode.height + ',Y,N'; //100
 			break;
 		case 'MicroPDF417':
 			return 'BFN,8,3';
@@ -152,13 +163,13 @@ function getBarCodeType(barcode)
 			return 'BKN,N,150,Y,N,A,A';
 			break;
 		case 'LOGMARS':
-			return 'BLN,100,N';
+			return 'BLN,' + barcode.height + ',N'; // 100
 			break;
 		case 'MSI':
-			return 'BMN,B,100,Y,N,N';
+			return 'BMN,B,' + barcode.height + ',Y,N,N'; // 100
 			break;
 		case 'Plessey':
-			return 'BPN,N,100,Y,N';
+			return 'BPN,N,' + barcode.height + ',Y,N'; // 100
 			break;
 		case 'QR Code':
 			return 'BQN,1,4';

@@ -20,7 +20,7 @@ io.on('connection', function(socket){
 
 	socket.on('registration', function(msg){
 	    console.log("name " + msg);
-	    msg = msg.replace(/(\r\n\t|\n|\r\t)/gm,"");
+	    msg = msg.replace(/(\r\n)/,"");
 	    msg.trim();
 	    users.push(msg);
 	    connections.push(socket.id);

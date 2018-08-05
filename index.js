@@ -58,7 +58,7 @@ app.post('/api/zplprinting', (req, res) => {
 
 	io.to(connection).emit('labelToPrint', req.body.command);
 
-	return "Successful";
+	res.send("Successful");
 });
 
 app.get('/api/cleareverything', (req, res) => {
@@ -66,8 +66,8 @@ app.get('/api/cleareverything', (req, res) => {
 	 //connections.indexOf(index);
 
 	//io.to(connection).emit('labelToPrint', "message from the server");
-	// users = [];
-	// connections = [];
+	users = [];
+	connections = [];
 	res.send("Successful");
 });
 

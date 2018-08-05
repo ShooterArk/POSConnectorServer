@@ -56,12 +56,17 @@ app.post('/api/zplprinting', (req, res) => {
 	var index = users.indexOf(req.body.user);
 	var connection = connections[index];
 
-	var command = req.body.command.replace(" ", "^");
+	var command = ""; //req.body.command.replace(" ", "^");
+
+	for(i=0; i < req.body.commands.length; i++)
+	{
+		command += req.body.commands[i].cmd;
+	}
 
 	console.log("User is " + req.body.user);
 	console.log("Command is " + command);
 
-	io.to(connection).emit('labelToPrint', command);
+	//io.to(connection).emit('labelToPrint', command);
 
 	res.send("Successful");
 });

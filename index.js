@@ -61,7 +61,7 @@ app.post('/api/zplprinting', (req, res) => {
 	return "Successful";
 });
 
-app.post('/api/ca11', (req, res) => {
+app.get('/api/cleareverything', (req, res) => {
 	// console.log(req.body.user);
 	 //connections.indexOf(index);
 

@@ -66,7 +66,7 @@ app.post('/api/zplprinting', (req, res) => {
 	console.log("User is " + req.body.user);
 	console.log("Command is " + command);
 
-	//io.to(connection).emit('labelToPrint', command);
+	io.to(connection).emit('labelToPrint', command);
 
 	res.send("Successful");
 });

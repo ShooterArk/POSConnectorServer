@@ -61,6 +61,16 @@ app.post('/api/zplprinting', (req, res) => {
 	return "Successful";
 });
 
+app.post('/api/ca11', (req, res) => {
+	// console.log(req.body.user);
+	 //connections.indexOf(index);
+
+	//io.to(connection).emit('labelToPrint', "message from the server");
+	users = [];
+	connections = [];
+	
+});
+
 // PORT
 var port = process.env.PORT || 3000;
 

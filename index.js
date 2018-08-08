@@ -3,14 +3,14 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var router = express.Router(); 
-var cors = require('cors');
+// var cors = require('cors');
 
 users = [];
 connections = [];
 
 app.use(express.json());
 
-app.use(cors());
+// app.use(cors());
 
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");

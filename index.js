@@ -9,7 +9,7 @@ users = [];
 connections = [];
 
 app.use(express.json());
-app.use('/api', router);
+
 app.use(cors());
 
 // app.use(function(req, res, next) {
@@ -98,7 +98,7 @@ app.get('/api/cleareverything', (req, res) => {
 	res.send("Successful");
 });
 
-
+app.use('/api', router);
 
 // PORT
 var port = process.env.PORT || 3000;

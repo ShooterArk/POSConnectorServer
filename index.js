@@ -15,6 +15,8 @@ app.use(express.json());
 //   next();
 // });
 
+
+
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/index.html');
 })
@@ -78,7 +80,7 @@ app.post('/api/zplprinting', (req, res) => {
 	res.send("Successful");
 });
 
-router.post('/api/zplprintings', (req, res) => {
+router.post('/zplprintings', (req, res) => {
 
 	res.json("Successful");
 });
@@ -92,6 +94,9 @@ app.get('/api/cleareverything', (req, res) => {
 	connections = [];
 	res.send("Successful");
 });
+
+
+app.use('/api', router);
 
 // PORT
 var port = process.env.PORT || 3000;

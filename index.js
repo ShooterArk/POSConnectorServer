@@ -3,11 +3,14 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var router = express.Router(); 
+var cors = require('cors');
 
 users = [];
 connections = [];
 
 app.use(express.json());
+app.use('/api', router);
+app.use(cors());
 
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -96,7 +99,6 @@ app.get('/api/cleareverything', (req, res) => {
 });
 
 
-app.use('/api', router);
 
 // PORT
 var port = process.env.PORT || 3000;

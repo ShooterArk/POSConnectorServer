@@ -69,20 +69,20 @@ router.post('/zplprinting', (req, res) => {
 
 	//io.to(connection).emit('labelToPrint', "message from the server");
 
-	// var index = users.indexOf(req.body.user);
-	// var connection = connections[index];
+	var index = users.indexOf(req.body.user);
+	var connection = connections[index];
 
-	// var command = ""; //req.body.command.replace(" ", "^");
+	var command = ""; //req.body.command.replace(" ", "^");
 
-	// for(i=0; i < req.body.commands.length; i++)
-	// {
-	// 	command += req.body.commands[i].cmd;
-	// }
+	for(i=0; i < req.body.commands.length; i++)
+	{
+		command += req.body.commands[i].cmd;
+	}
 
-	// console.log("User is " + req.body.user);
-	// console.log("Command is " + command);
+	console.log("User is " + req.body.user);
+	console.log("Command is " + command);
 
-	// io.to(connection).emit('labelToPrint', command);
+	io.to(connection).emit('labelToPrint', command);
 
 	console.log(req.body);
 

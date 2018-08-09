@@ -3,12 +3,17 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var router = express.Router(); 
+var bodyParser = require('body-parser')
 // var cors = require('cors');
 
 users = [];
 connections = [];
 
 app.use(express.json());
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // app.use(cors());
 

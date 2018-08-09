@@ -59,7 +59,7 @@ app.post('/api/printlabel', (req, res) => {
 	createCommand(req.body);
 });
 
-app.post('/api/zplprinting', (req, res) => {
+router.post('/zplprinting', (req, res) => {
 	// console.log(req.body.user);
 	 //connections.indexOf(index);
 

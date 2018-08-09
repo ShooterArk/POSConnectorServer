@@ -80,7 +80,7 @@ router.post('/zplprinting', (req, res) => {
 
 	// io.to(connection).emit('labelToPrint', command);
 
-	console.log(req.body);
+	console.log(req);
 
 	res.send("Successful");
 });

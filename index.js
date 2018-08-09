@@ -9,7 +9,7 @@ var bodyParser = require('body-parser')
 users = [];
 connections = [];
 
-app.use(express.json());
+// app.use(express.json());
 
 
 app.use(bodyParser.json());

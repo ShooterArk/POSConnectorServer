@@ -79,8 +79,8 @@ router.post('/zplprinting', (req, res) => {
 		command += req.body.commands[i].cmd;
 	}
 
-	console.log("User is " + req.body.user);
-	console.log("Command is " + command);
+	// console.log("User is " + req.body.user);
+	// console.log("Command is " + command);
 
 	io.to(connection).emit('labelToPrint', command);
 
@@ -132,7 +132,7 @@ function createCommand(data)
 		}
 		else{
 			console.log("font is not 0");
-			command += "^A2N," + data.textArray[i].font +  "," + data.textArray[i].font;
+			command += "^^A0N," + data.textArray[i].font +  ","; // + data.textArray[i].font;
 		}
 
 		command += "^FD" + data.textArray[i].text + "\n\r^FS\n\r"

@@ -117,6 +117,12 @@ function createCommand(data)
 {
 	var command = "^XA\n\r";
 
+	cmd += "^LL" + data.width + "\n";
+    // command.push({"cmd": cmd});
+    cmd += "^PW" + data.height + "\n";
+    // command.push({"cmd": cmd});
+    cmd += "^MUd" + "\n";
+
 	// Convert Text Array to Commands
 	for(i=0; i < data.textArray.length; i++)
 	{

@@ -113,47 +113,111 @@ http.listen(port, function(){
 	console.log("listening at port " + port);
 })
 
+// function createCommand(data)
+// {
+// 	var command = "^XA\n\r";
+
+// 	// command += "^LL" + data.width + "\n";
+//  //    // command.push({"cmd": cmd});
+//  //    command += "^PW" + data.height + "\n";
+//  //    // command.push({"cmd": cmd});
+//  //    command += "^MUd" + "\n";
+
+// 	// Convert Text Array to Commands
+// 	for(i=0; i < data.textArray.length; i++)
+// 	{
+// 		command += "^FO" + data.textArray[i].XPosition + "," + data.textArray[i].YPosition + "\n\r";
+
+
+// 		console.log(data.textArray[i].font);
+
+// 		if(data.textArray[i].font == 0)
+// 		{
+// 			console.log("font is 0");
+// 			command += "^ADN,0,0";
+// 		}
+// 		else{
+// 			console.log("font is not 0");
+// 			command += "^A0N," + data.textArray[i].font +  ","; // + data.textArray[i].font;
+// 		}
+
+// 		command += "^FD" + data.textArray[i].text + "\n\r^FS\n\r"
+// 	}
+
+// 	// Map the barcode
+// 	command += "^FO" + data.Barcode.XPosition + "," + data.Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.Barcode) + "\n\r" + "^FD" + data.Barcode.data + "\n\r^FS\n\r"; 
+
+// 	// Set the Quantity value in the command
+// 	command += "^PQ" + data.Quantity + "\n\r"
+// 	command += "^XZ";
+// 	var index = users.indexOf(data.user);
+// 	var connection = connections[index];
+
+// 	io.to(connection).emit('labelToPrint', command);
+
+// }
+
+function mm2dots(mm) {
+    return Math.round(mm * dpmm);
+}
+
+function pt2dots(pt) {
+    return mm2dots(pt / ptpmm);
+}
+
+function dots2mm(mm) {
+    return Math.round(mm / dpmm);
+}
+
+function dots2pt(pt) {
+    return dots2mm(pt * ptpmm);
+}
+
 function createCommand(data)
 {
-	var command = "^XA\n\r";
 
-	// command += "^LL" + data.width + "\n";
- //    // command.push({"cmd": cmd});
- //    command += "^PW" + data.height + "\n";
- //    // command.push({"cmd": cmd});
- //    command += "^MUd" + "\n";
+	for (j =0; j < data.cmd.length; j++) {
 
-	// Convert Text Array to Commands
-	for(i=0; i < data.textArray.length; i++)
-	{
-		command += "^FO" + data.textArray[i].XPosition + "," + data.textArray[i].YPosition + "\n\r";
+		var command = "^XA\n\r";
 
+		// command += "^LL" + data.width + "\n";
+	 //    // command.push({"cmd": cmd});
+	 //    command += "^PW" + data.height + "\n";
+	 //    // command.push({"cmd": cmd});
+	 //    command += "^MUd" + "\n";
 
-		console.log(data.textArray[i].font);
-
-		if(data.textArray[i].font == 0)
+		// Convert Text Array to Commands
+		for(i=0; i < data.cmd[j].textArray.length; i++)
 		{
-			console.log("font is 0");
-			command += "^ADN,0,0";
-		}
-		else{
-			console.log("font is not 0");
-			command += "^A0N," + data.textArray[i].font +  ","; // + data.textArray[i].font;
+			command += "^FO" + data.cmd[j].textArray[i].XPosition + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
+
+
+			console.log(data.cmd[j].textArray[i].font);
+
+			if(data.cmd[j].textArray[i].font == 0)
+			{
+				console.log("font is 0");
+				command += "^ADN,0,0";
+			}
+			else{
+				console.log("font is not 0");
+				command += "^A0N," + data.cmd[j].textArray[i].font +  ","; // + data.textArray[i].font;
+			}
+
+			command += "^FD" + data.cmd[j].textArray[i].text + "\n\r^FS\n\r"
 		}
 
-		command += "^FD" + data.textArray[i].text + "\n\r^FS\n\r"
+		// Map the barcode
+		command += "^FO" + data.cmd[j].Barcode.XPosition + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+
+		// Set the Quantity value in the command
+		command += "^PQ" + data.Quantity + "\n\r"
+		command += "^XZ";
+		var index = users.indexOf(data.user);
+		var connection = connections[index];
+
+		io.to(connection).emit('labelToPrint', command);
 	}
-
-	// Map the barcode
-	command += "^FO" + data.Barcode.XPosition + "," + data.Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.Barcode) + "\n\r" + "^FD" + data.Barcode.data + "\n\r^FS\n\r"; 
-
-	// Set the Quantity value in the command
-	command += "^PQ" + data.Quantity + "\n\r"
-	command += "^XZ";
-	var index = users.indexOf(data.user);
-	var connection = connections[index];
-
-	io.to(connection).emit('labelToPrint', command);
 
 }
 

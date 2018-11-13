@@ -157,6 +157,11 @@ http.listen(port, function(){
 
 // }
 
+var mmpi = 25.4;
+var dpi = 203;
+var ptpmm = 2.834645669;
+var dpmm = dpi / mmpi;
+
 function mm2dots(mm) {
     return Math.round(mm * dpmm);
 }
@@ -175,41 +180,79 @@ function dots2pt(pt) {
 
 function createCommand(data)
 {
-
+	var labelWidth = mm2dots(data.width);
+	var labelStripWidth = labelWidth * data.column;
+	
 	for (j =0; j < data.cmd.length; j++) {
 
 		var command = "^XA\n\r";
 
-		// command += "^LL" + data.width + "\n";
-	 //    // command.push({"cmd": cmd});
-	 //    command += "^PW" + data.height + "\n";
-	 //    // command.push({"cmd": cmd});
-	 //    command += "^MUd" + "\n";
-
-		// Convert Text Array to Commands
-		for(i=0; i < data.cmd[j].textArray.length; i++)
+		if(data.column !== 1)
 		{
-			command += "^FO" + data.cmd[j].textArray[i].XPosition + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
-
-
-			console.log(data.cmd[j].textArray[i].font);
-
-			if(data.cmd[j].textArray[i].font == 0)
-			{
-				console.log("font is 0");
-				command += "^ADN,0,0";
-			}
-			else{
-				console.log("font is not 0");
-				command += "^A0N," + data.cmd[j].textArray[i].font +  ","; // + data.textArray[i].font;
-			}
-
-			command += "^FD" + data.cmd[j].textArray[i].text + "\n\r^FS\n\r"
+			command += "^MMC" + "\n";
+			command += "^PW" + labelStripWidth + "\n";
+			command += "^LL" + mm2dots(data.height) + "\n";
+		    command += "^LS0" + "\n";
 		}
+ 		
+ 		// Counter for iterate through the columns printing.
+		var count = 1;
 
-		// Map the barcode
-		command += "^FO" + data.cmd[j].Barcode.XPosition + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+		while(count <= data.column)
+		{
+			// Convert Text Array to Commands
+			for(i=0; i < data.cmd[j].textArray.length; i++)
+			{
+				// Check for the counter for the column number
+				if(count == 1)
+				{
+					command += "^FO" + data.cmd[j].textArray[i].XPosition + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
+				}
+				else if(count == 2)
+				{
+					// Position of the Text Object.
+					// Label Width
+					// 15 is the gap between two labels.
+					var xpos = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth + 15 );
+					command += "^FO" + xpos + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
+				}
+				else if(count == 3)
+				{
+					var xpos = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth * count) + 15;
+					command += "^FO" + xpos + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
+				}
+				
 
+				if(data.cmd[j].textArray[i].font == 0)
+				{
+					command += "^ADN,0,0";
+				}
+				else{
+					command += "^A0N," + data.cmd[j].textArray[i].font +  ","; // + data.textArray[i].font;
+				}
+
+				command += "^FD" + data.cmd[j].textArray[i].text + "\n\r^FS\n\r"
+			}
+
+			// Map the barcode
+			if(count == 1)
+			{
+				command += "^FO" + data.cmd[j].Barcode.XPosition + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+			}
+			else if(count == 2)
+			{
+				var xpos = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth + 15 );
+				command += "^FO" + xpos + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+			}
+			else if(count == 3)
+			{
+				var xpos = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth * count) + 15;
+				command += "^FO" + xpos+ "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+			}
+
+			count++;
+		}
+		
 		// Set the Quantity value in the command
 		command += "^PQ" + data.Quantity + "\n\r"
 		command += "^XZ";

@@ -60,6 +60,8 @@ app.post('/api/printlabel', (req, res) => {
 
 	//io.to(connection).emit('labelToPrint', "message from the server");
 
+	// console.log("Command received");
+
 	createCommand(req.body);
 });
 
@@ -249,15 +251,18 @@ function createCommand(data)
 				var xpos = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth * count) + 15;
 				command += "^FO" + xpos+ "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
 			}
+			// Set the Quantity value in the command
+			command += "^PQ" + data.cmd[j].Quantity + "\n\r"
 
 			count++;
-		}
+		}	
 		
-		// Set the Quantity value in the command
-		command += "^PQ" + data.Quantity + "\n\r"
 		command += "^XZ";
 		var index = users.indexOf(data.user);
 		var connection = connections[index];
+
+		// console.log('Command ' + command);
+		// console.log('Connection ' + connection);
 
 		io.to(connection).emit('labelToPrint', command);
 	}

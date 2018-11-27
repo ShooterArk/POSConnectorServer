@@ -184,6 +184,7 @@ function createCommand(data)
 {
 	var labelWidth = mm2dots(data.width);
 	var labelStripWidth = labelWidth * data.column;
+	console.log("Label " + labelWidth + " mm2dots " + labelStripWidth)
 	
 	for (j =0; j < data.cmd.length; j++) {
 
@@ -192,8 +193,8 @@ function createCommand(data)
 		if(data.column !== 1)
 		{
 			command += "^MMC" + "\n";
-			command += "^PW" + labelStripWidth + "\n";
 			command += "^LL" + mm2dots(data.height) + "\n";
+			command += "^PW" + labelStripWidth + "\n";
 		    command += "^LS0" + "\n";
 		}
  		
@@ -208,6 +209,7 @@ function createCommand(data)
 				// Check for the counter for the column number
 				if(count == 1)
 				{
+					console.log("Printing First column");
 					command += "^FO" + data.cmd[j].textArray[i].XPosition + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
 				}
 				else if(count == 2)
@@ -215,13 +217,15 @@ function createCommand(data)
 					// Position of the Text Object.
 					// Label Width
 					// 15 is the gap between two labels.
-					var xpos = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth + 15 );
+					console.log("Printing Second column");
+					var xpos = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth + 15);
 					command += "^FO" + xpos + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
 				}
 				else if(count == 3)
 				{
-					var xpos = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth * count) + 15;
-					command += "^FO" + xpos + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
+					console.log("Printing third column");
+					var xpos3 = parseInt(data.cmd[j].textArray[i].XPosition) + (labelWidth * 2) + 30;
+					command += "^FO" + xpos3 + "," + data.cmd[j].textArray[i].YPosition + "\n\r";
 				}
 				
 
@@ -243,13 +247,13 @@ function createCommand(data)
 			}
 			else if(count == 2)
 			{
-				var xpos = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth + 15 );
-				command += "^FO" + xpos + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+				var xposBar2 = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth + 15 );
+				command += "^FO" + xposBar2 + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
 			}
 			else if(count == 3)
 			{
-				var xpos = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth * count) + 15;
-				command += "^FO" + xpos+ "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
+				var xposBar3 = parseInt(data.cmd[j].Barcode.XPosition) + (labelWidth * 2) + 30;
+				command += "^FO" + xposBar3 + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
 			}
 			// Set the Quantity value in the command
 			command += "^PQ" + data.cmd[j].Quantity + "\n\r"

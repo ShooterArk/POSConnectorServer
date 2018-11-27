@@ -256,7 +256,15 @@ function createCommand(data)
 				command += "^FO" + xposBar3 + "," + data.cmd[j].Barcode.YPosition +"\n\r^BY2^" + getBarCodeType(data.cmd[j].Barcode) + "\n\r" + "^FD" + data.cmd[j].Barcode.data + "\n\r^FS\n\r"; 
 			}
 			// Set the Quantity value in the command
-			command += "^PQ" + data.cmd[j].Quantity + "\n\r"
+			var qty = 0;
+			if(data.column == 1)
+			{
+				qty = data.cmd[j].Quantity;
+			}
+			else {
+				qty = Math.ceil(data.cmd[j].Quantity / data.column);
+			}
+			command += "^PQ" + qty + "\n\r"
 
 			count++;
 		}	
